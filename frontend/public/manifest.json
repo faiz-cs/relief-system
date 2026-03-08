@@ -1,0 +1,15 @@
+{
+  "short_name": "ReliefOps",
+  "name": "ReliefOps - Relief Distribution System",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1a1a2e",
+  "background_color": "#f8fafc",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}
