@@ -19,8 +19,32 @@ export default function EventDetail() {
     }).finally(() => setLoading(false));
   }, [id]);
 
-  const handleExportCSV = () => window.open(`${process.env.REACT_APP_API_URL}/api/reports/export/csv/${id}`, '_blank');
-  const handleExportPDF = () => window.open(`${process.env.REACT_APP_API_URL}/api/reports/export/pdf/${id}`, '_blank');
+  const handleExportCSV = async () => {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/export/csv/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `event-${id}-report.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+  const handleExportPDF = async () => {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/export/pdf/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `event-${id}-report.pdf`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   const filtered = tokens.filter(t => {
     if (filter === 'distributed') return t.status === 'distributed';
