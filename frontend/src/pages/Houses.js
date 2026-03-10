@@ -110,7 +110,7 @@ export default function Houses() {
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
           <thead>
             <tr style={{ background: '#f8fafc' }}>
-              {['Owner Name', 'Address', 'Ward', 'Members', 'Phone', 'Ration Card', 'Actions'].map(h => (
+              {['Owner Name', 'Address', 'Ward', 'Members', 'Phone', 'Email', 'Ration Card', 'Actions'].map(h => (
                 <th key={h} style={{ padding: '12px 16px', textAlign: 'left', color: '#374151', fontWeight: 600, borderBottom: '1px solid #e5e7eb' }}>{h}</th>
               ))}
             </tr>
@@ -127,6 +127,7 @@ export default function Houses() {
                 <td style={{ padding: '12px 16px' }}><span style={{ background: '#eff6ff', color: '#1d4ed8', padding: '2px 8px', borderRadius: 99, fontSize: 11 }}>{h.ward}</span></td>
                 <td style={{ padding: '12px 16px' }}>{h.members_count}</td>
                 <td style={{ padding: '12px 16px', color: '#6b7280' }}>{h.phone || '—'}</td>
+                <td style={{ padding: '12px 16px', color: '#6b7280' }}>{h.email || '—'}</td>
                 <td style={{ padding: '12px 16px', color: '#6b7280' }}>{h.ration_card_number || '—'}</td>
                 <td style={{ padding: '12px 16px' }}>
                   <button onClick={() => handleDelete(h.id)} style={{ padding: '4px 10px', background: '#fef2f2', color: '#dc2626', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 12 }}>Delete</button>
