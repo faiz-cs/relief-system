@@ -15,6 +15,12 @@ const SEVERITY = {
   MEDIUM: 'MEDIUM',
 };
 
+// Compare only dates (ignore time) to avoid UTC/IST timezone mismatch
+function toDateOnly(dateStr) {
+  const d = new Date(dateStr);
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+
 async function checkFraud(supabase, { token, distributorId, scannedAt }) {
   const flags = [];
 
@@ -27,17 +33,18 @@ async function checkFraud(supabase, { token, distributorId, scannedAt }) {
     });
   }
 
-  // Rule 2: Time window violation
+  // Rule 2: Time window violation — compare DATE only (not time) to avoid timezone issues
   const event = token.events;
   if (event) {
-    const now = new Date(scannedAt);
-    const start = new Date(event.start_date);
-    const end = new Date(event.end_date);
-    if (now < start || now > end) {
+    const today = toDateOnly(scannedAt);
+    const start = toDateOnly(event.start_date);
+    const end = toDateOnly(event.end_date);
+
+    if (today < start || today > end) {
       flags.push({
         rule: RULES.TIME_WINDOW_VIOLATION,
         severity: SEVERITY.HIGH,
-        message: `Scan outside event window (${event.start_date} - ${event.end_date})`,
+        message: `Scan outside event window (${event.start_date.slice(0,10)} - ${event.end_date.slice(0,10)})`,
       });
     }
 

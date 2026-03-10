@@ -32,11 +32,11 @@ router.get('/:id', authenticate, async (req, res) => {
 
 // Create house
 router.post('/', authenticate, requireRole('admin', 'supervisor'), async (req, res) => {
-  const { owner_name, address, ward, members_count, phone, ration_card_number } = req.body;
+  const { owner_name, address, ward, members_count, phone, email, ration_card_number } = req.body;
   if (!owner_name || !address || !ward)
     return res.status(400).json({ error: 'owner_name, address, ward are required' });
 
-  const { data, error } = await supabase.from('houses').insert([{ owner_name, address, ward, members_count, phone, ration_card_number }]).select().single();
+  const { data, error } = await supabase.from('houses').insert([{ owner_name, address, ward, members_count, phone, email, ration_card_number }]).select().single();
   if (error) return res.status(500).json({ error: error.message });
   res.status(201).json(data);
 });
@@ -80,7 +80,7 @@ router.post('/import/csv', authenticate, requireRole('admin', 'supervisor'), upl
     }
     const { data, error } = await supabase
       .from('houses')
-      .insert([{ owner_name: row.owner_name, address: row.address, ward: row.ward, members_count: row.members_count || 1, phone: row.phone, ration_card_number: row.ration_card_number }])
+      .insert([{ owner_name: row.owner_name, address: row.address, ward: row.ward, members_count: row.members_count || 1, phone: row.phone, email: row.email, ration_card_number: row.ration_card_number }])
       .select()
       .single();
     if (error) skipped.push({ row, reason: error.message });
