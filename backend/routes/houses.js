@@ -30,6 +30,19 @@ router.get('/:id', authenticate, async (req, res) => {
   res.json(data);
 });
 
+// ── NEW: Get all tokens for a specific house (with event details) ──────────
+// Used by admin "View QR" button — shows live collection status
+router.get('/:id/tokens', authenticate, async (req, res) => {
+  const { data, error } = await supabase
+    .from('tokens')
+    .select('*, events(name, start_date, end_date, status)')
+    .eq('house_id', req.params.id)
+    .order('created_at', { ascending: false });
+
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data || []);
+});
+
 // Create house
 router.post('/', authenticate, requireRole('admin', 'supervisor'), async (req, res) => {
   const { owner_name, address, ward, members_count, phone, email, ration_card_number } = req.body;
